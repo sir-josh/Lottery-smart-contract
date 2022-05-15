@@ -53,5 +53,22 @@ describe('Lottery contract', ()=>{
         assert.equal(accounts[7], players[2]);
         assert.equal(3, players.length);
     });
+
+    it('requires minimum amount from to enter', async() => {
+        try {
+            await lottery.methods.enter().send({
+                from: accounts[8],
+                value: web3.utils.toWei('0.0005', 'ether')  // Insufficient amount; the test should pass because I'm asserting for error 
+                                                            // in the catch block
+
+                //value: web3.utils.toWei('1', 'ether')     // Sufficient amount, expecting error because I want the test to fail
+            });
+        } catch (error) {
+            assert(error);
+            return;
+        }
+
+        assert(false);
+    });
 });
 
