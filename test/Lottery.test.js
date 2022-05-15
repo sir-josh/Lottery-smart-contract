@@ -42,7 +42,7 @@ describe('Lottery contract', ()=>{
             value: web3.utils.toWei('0.2', 'ether')
         });
         await lottery.methods.enter().send({
-            from: accounts[7],
+            from: accounts[4],
             value: web3.utils.toWei('0.2', 'ether')
         });
 
@@ -50,14 +50,14 @@ describe('Lottery contract', ()=>{
 
         assert.equal(accounts[1], players[0]);
         assert.equal(accounts[3], players[1]);
-        assert.equal(accounts[7], players[2]);
+        assert.equal(accounts[4], players[2]);
         assert.equal(3, players.length);
     });
 
     it('requires minimum amount from to enter', async() => {
         try {
             await lottery.methods.enter().send({
-                from: accounts[8],
+                from: accounts[2],
                 value: web3.utils.toWei('0.0005', 'ether')  // Insufficient amount; the test should pass because I'm asserting for error 
                                                             // in the catch block
 
@@ -69,6 +69,23 @@ describe('Lottery contract', ()=>{
         }
 
         assert(false);
+    });
+
+    it('Only manager picks a winner', async() => {
+        const pickWinnerError = 'Expected an error and didn\'t get one!';
+
+        try {
+            await lottery.methods.pickWinner().send({
+                from: accounts[0]
+            });
+
+            throw new Error(pickWinnerError);
+
+        } catch (error) {
+            //assert(error);
+            // console.log(error);
+            assert.notEqual(pickWinnerError, error.message);
+        }
     });
 });
 
