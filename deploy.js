@@ -1,15 +1,13 @@
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
-const ganache = require('ganache-cli');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 const Web3 = require('web3');
 const { interface, bytecode } = require('./compile');
-const provider = ganache.provider();
+require('dotenv').config();
 
-// const provider = new HDWalletProvider(
-//   'REPLACE_WITH_YOUR_MNEMONIC',
-//   // remember to change this to your own phrase!
-//   'https://rinkeby.infura.io/v3/15c1d32581894b88a92d8d9e519e476c'
-//   // remember to change this to your own endpoint!
-// );
+
+const { INFURA_URL, PRIVATE_KEY } = process.env;
+
+const provider = new HDWalletProvider(PRIVATE_KEY, INFURA_URL );
+
 const web3 = new Web3(provider);
 
 const deploy = async () => {
@@ -24,4 +22,5 @@ const deploy = async () => {
   console.log('Contract deployed to', result.options.address);
   provider.engine.stop();
 };
+
 deploy();
