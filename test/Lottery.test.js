@@ -12,7 +12,7 @@ beforeEach(async () => {
 
     lottery = await new web3.eth.Contract(abi)
                         .deploy({ data: evm.bytecode.object })
-                        .send({ from: accounts[0], gas: '1000000'});
+                        .send({ from: accounts[0], gas: '6721975'});
 });
 
 describe('Lottery contract', ()=>{
@@ -90,15 +90,15 @@ describe('Lottery contract', ()=>{
 
     it('sends money to winner and resets player array', async() => {
         await lottery.methods.enter().send({
-            from: accounts[8],
+            from: accounts[0],
             value: web3.utils.toWei('2', 'ether')
         });
 
-        const initialBalance = await web3.eth.getBalance(accounts[8]);
+        const initialBalance = await web3.eth.getBalance(accounts[0]);
 
         await lottery.methods.pickWinner().send({ from: accounts[0] });
 
-        const finalBalance = await web3.eth.getBalance(accounts[8]);
+        const finalBalance = await web3.eth.getBalance(accounts[0]);
 
         const balDifference = finalBalance - initialBalance;
 
